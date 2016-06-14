@@ -6,9 +6,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import org.jetbrains.anko.async
 import org.jetbrains.anko.find
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import se.driessen.johan.weatherapp.R
 import se.driessen.johan.weatherapp.domain.commands.RequestForecastCommand
+import se.driessen.johan.weatherapp.domain.model.Forecast
 import se.driessen.johan.weatherapp.ui.adapters.ForecastListAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +26,12 @@ class MainActivity : AppCompatActivity() {
 			val result = RequestForecastCommand("Stockholm,se").execute()
 
 			uiThread {
-				forecastList.adapter = ForecastListAdapter(result)
+				forecastList.adapter = ForecastListAdapter(result,
+						object : ForecastListAdapter.OnItemClickListener {
+							override fun invoke(forecast: Forecast) {
+								toast(forecast.date)
+							}
+						})
 			}
 		}
 	}
