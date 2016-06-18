@@ -13,8 +13,10 @@ import se.driessen.johan.weatherapp.domain.model.Forecast
 import se.driessen.johan.weatherapp.domain.model.ForecastList
 import se.driessen.johan.weatherapp.ui.utils.ctx
 
-class ForecastListAdapter(val weekForecast: ForecastList, val itemClick: ForecastListAdapter.OnItemClickListener) :
-		RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
+class ForecastListAdapter(
+		val weekForecast: ForecastList,
+		val itemClick: (Forecast) -> Unit
+	) :	RecyclerView.Adapter<ForecastListAdapter.ViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
 		var view = LayoutInflater.from(parent.ctx)
@@ -29,7 +31,7 @@ class ForecastListAdapter(val weekForecast: ForecastList, val itemClick: Forecas
 
 	override fun getItemCount(): Int = weekForecast.size()
 
-	class ViewHolder(val view: View, val itemClick: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+	class ViewHolder(val view: View, val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
 
 		private val iconView: ImageView
 		private val dateView: TextView

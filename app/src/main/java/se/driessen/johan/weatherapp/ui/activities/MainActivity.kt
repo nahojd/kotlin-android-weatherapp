@@ -1,5 +1,8 @@
 package se.driessen.johan.weatherapp.ui.activities
 
+import android.annotation.TargetApi
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -13,8 +16,10 @@ import se.driessen.johan.weatherapp.domain.commands.RequestForecastCommand
 import se.driessen.johan.weatherapp.domain.model.Forecast
 import se.driessen.johan.weatherapp.ui.adapters.ForecastListAdapter
 
+
 class MainActivity : AppCompatActivity() {
 
+	@TargetApi(21)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
@@ -22,17 +27,24 @@ class MainActivity : AppCompatActivity() {
 		val forecastList: RecyclerView = find(R.id.forecast_list)
 		forecastList.layoutManager = LinearLayoutManager(this)
 
+		supportsLollipop {
+			window.statusBarColor = Color.DKGRAY
+		}
+
 		async() {
 			val result = RequestForecastCommand("Stockholm,se").execute()
 
 			uiThread {
-				forecastList.adapter = ForecastListAdapter(result,
-						object : ForecastListAdapter.OnItemClickListener {
-							override fun invoke(forecast: Forecast) {
-								toast(forecast.date)
-							}
-						})
+				forecastList.adapter = ForecastListAdapter(result, { toast(it.date) })
+
 			}
 		}
+	}
+}
+
+
+inline fun supportsLollipop(code: () -> Unit) {
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+		code()
 	}
 }
