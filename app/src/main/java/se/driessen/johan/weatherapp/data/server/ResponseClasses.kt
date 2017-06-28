@@ -1,4 +1,4 @@
-package se.driessen.johan.weatherapp.data
+package se.driessen.johan.weatherapp.data.server
 
 /**
  * Created by johan on 2016-06-06.

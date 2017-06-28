@@ -1,7 +1,7 @@
 package se.driessen.johan.weatherapp.ui
 
 import android.app.Application
-import se.driessen.johan.weatherapp.ui.utils.DelegatesExt
+import se.driessen.johan.weatherapp.extensions.DelegatesExt
 
 class App : Application() {
 	companion object {

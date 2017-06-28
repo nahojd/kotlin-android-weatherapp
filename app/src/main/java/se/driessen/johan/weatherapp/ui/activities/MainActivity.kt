@@ -29,10 +29,10 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		doAsync() {
-			val result = RequestForecastCommand("Stockholm,se").execute()
+			val result = RequestForecastCommand(12068).execute()
 
 			uiThread {
-				forecastList.adapter = ForecastListAdapter(result, { toast(it.date) })
+				forecastList.adapter = ForecastListAdapter(result, { toast(it.description) })
 
 			}
 		}

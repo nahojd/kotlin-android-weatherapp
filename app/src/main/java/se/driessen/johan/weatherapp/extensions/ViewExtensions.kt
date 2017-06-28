@@ -1,4 +1,4 @@
-package se.driessen.johan.weatherapp.ui.utils
+package se.driessen.johan.weatherapp.extensions
 
 import android.content.Context
 import android.view.View
