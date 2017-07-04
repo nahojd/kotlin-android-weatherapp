@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 			window.statusBarColor = Color.DKGRAY
 		}
 
-		doAsync() {
+		doAsync {
 			val result = RequestForecastCommand(12068).execute()
 
 			uiThread {

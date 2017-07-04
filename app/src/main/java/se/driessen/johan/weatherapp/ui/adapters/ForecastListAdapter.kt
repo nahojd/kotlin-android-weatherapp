@@ -29,15 +29,15 @@ class ForecastListAdapter(val weekForecast: ForecastList, val itemClick: (Foreca
 
 	override fun getItemCount() = weekForecast.size()
 
-	class ViewHolder(val view: View, val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
+	class ViewHolder(view: View, val itemClick: (Forecast) -> Unit) : RecyclerView.ViewHolder(view) {
 
 		fun bindForecast(forecast: Forecast) {
 			with(forecast) {
 				Picasso.with(itemView.ctx).load(iconUrl).into(itemView.icon)
 				itemView.date.text = convertDate(date)
 				itemView.description.text = description
-				itemView.maxTemperature.text = "${high.toString()}°"
-				itemView.minTemperature.text = "${low.toString()}°"
+				itemView.maxTemperature.text = "$high°"
+				itemView.minTemperature.text = "$low°"
 				itemView.setOnClickListener { itemClick(this) }
 			}
 		}

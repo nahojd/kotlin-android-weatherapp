@@ -2,17 +2,18 @@ package se.driessen.johan.weatherapp.data.db
 
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
+import se.driessen.johan.weatherapp.domain.datasource.ForecastDataSource
 import se.driessen.johan.weatherapp.domain.model.ForecastList
 import se.driessen.johan.weatherapp.extensions.clear
 import se.driessen.johan.weatherapp.extensions.parseList
 import se.driessen.johan.weatherapp.extensions.parseOpt
 import se.driessen.johan.weatherapp.extensions.toVarargArray
 
-class ForecastDb(
+class ForecastDb (
 	val forecastDbHelper: ForecastDbHelper = ForecastDbHelper.instance,
-	val dataMapper: DbDataMapper = DbDataMapper()) {
+	val dataMapper: DbDataMapper = DbDataMapper()) : ForecastDataSource {
 
-	fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
+	override fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
 		val dailyRequest = "${DayForecastTable.CITY_ID} = ? AND ${DayForecastTable.DATE} >= ?"
 
 		val dailyForecast = select(DayForecastTable.NAME)
@@ -32,7 +33,9 @@ class ForecastDb(
 
 		with(dataMapper.convertFromDomain(forecast)) {
 			insert(CityForecastTable.NAME, *map.toVarargArray())
-			dailyForecast.forEach { insert(DayForecastTable.NAME, *it.map.toVarargArray()) }
+			dailyForecast.forEach {
+				insert(DayForecastTable.NAME, *it.map.toVarargArray())
+			}
 		}
 	}
 }

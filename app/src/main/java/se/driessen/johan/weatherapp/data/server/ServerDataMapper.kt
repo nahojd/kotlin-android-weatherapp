@@ -1,15 +1,13 @@
-package se.driessen.johan.weatherapp.domain.mappers
+package se.driessen.johan.weatherapp.data.server
 
-import se.driessen.johan.weatherapp.data.server.Forecast
-import se.driessen.johan.weatherapp.data.server.ForecastResult
 import se.driessen.johan.weatherapp.domain.model.ForecastList
 import java.util.*
 import java.util.concurrent.TimeUnit
 import se.driessen.johan.weatherapp.domain.model.Forecast as ModelForecast
 
-class ForecastDataMapper {
+class ServerDataMapper {
 
-	fun convertFromDataModel(zipCode: Long, forecast: ForecastResult) = with(forecast) {
+	fun convertToDomain(zipCode: Long, forecast: ForecastResult) = with(forecast) {
 		ForecastList(zipCode, city.name, city.country, convertForecastListToDomain(list))
 	}
 

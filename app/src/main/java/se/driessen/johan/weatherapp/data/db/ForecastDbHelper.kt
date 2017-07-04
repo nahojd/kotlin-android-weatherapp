@@ -27,7 +27,10 @@ class ForecastDbHelper(ctx: Context = App.instance) :
 				CityForecastTable.COUNTRY to TEXT)
 
 		db.createTable(DayForecastTable.NAME, true,
-				DayForecastTable.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+				//This currently does not work, although it should.
+				//See issue https://github.com/Kotlin/anko/issues/409
+				//DayForecastTable.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+				DayForecastTable.ID to SqlType.create("INTEGER PRIMARY KEY AUTOINCREMENT"),
 				DayForecastTable.DATE to INTEGER,
 				DayForecastTable.DESCRIPTION to TEXT,
 				DayForecastTable.HIGH to INTEGER,

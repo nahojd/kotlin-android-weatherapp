@@ -1,8 +1,5 @@
 package se.driessen.johan.weatherapp.data.server
 
-/**
- * Created by johan on 2016-06-06.
- */
 data class ForecastResult(
 		val city: City,
 		val list: List<Forecast>)

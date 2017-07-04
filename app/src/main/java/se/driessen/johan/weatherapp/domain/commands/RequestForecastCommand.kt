@@ -1,16 +1,16 @@
 package se.driessen.johan.weatherapp.domain.commands
 
-import se.driessen.johan.weatherapp.data.server.ForecastRequest
-import se.driessen.johan.weatherapp.domain.mappers.ForecastDataMapper
+import se.driessen.johan.weatherapp.domain.datasource.ForecastProvider
 import se.driessen.johan.weatherapp.domain.model.ForecastList
 
-/**
- * Created by johan on 2016-06-06.
- */
-class RequestForecastCommand(private val zipCode: Long): Command<ForecastList> {
+class RequestForecastCommand(val zipCode: Long,
+                             val forecastProvider: ForecastProvider = ForecastProvider()) : Command<ForecastList> {
+
+	companion object {
+		val DAYS = 7
+	}
 
 	override fun execute(): ForecastList {
-		val forecastRequest = ForecastRequest(zipCode)
-		return ForecastDataMapper().convertFromDataModel(zipCode, forecastRequest.execute())
+		return forecastProvider.requestByZipCode(zipCode, DAYS)
 	}
 }
