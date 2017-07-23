@@ -3,11 +3,9 @@ package se.driessen.johan.weatherapp.data.db
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import se.driessen.johan.weatherapp.domain.datasource.ForecastDataSource
+import se.driessen.johan.weatherapp.domain.model.Forecast
 import se.driessen.johan.weatherapp.domain.model.ForecastList
-import se.driessen.johan.weatherapp.extensions.clear
-import se.driessen.johan.weatherapp.extensions.parseList
-import se.driessen.johan.weatherapp.extensions.parseOpt
-import se.driessen.johan.weatherapp.extensions.toVarargArray
+import se.driessen.johan.weatherapp.extensions.*
 
 class ForecastDb (
 	val forecastDbHelper: ForecastDbHelper = ForecastDbHelper.instance,
@@ -25,6 +23,11 @@ class ForecastDb (
 				.parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
 		if (city != null) dataMapper.convertToDomain(city) else null
+	}
+
+	override fun requestDayForecast(id: Long): Forecast? = forecastDbHelper.use {
+		val forecast = select(DayForecastTable.NAME).byId(id).parseOpt { DayForecast(HashMap(it)) }
+		if (forecast != null) dataMapper.convertDayToDomain(forecast) else null
 	}
 
 	fun saveForecast(forecast: ForecastList) = forecastDbHelper.use {

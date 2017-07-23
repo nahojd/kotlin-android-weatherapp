@@ -14,3 +14,4 @@ class RequestForecastCommand(val zipCode: Long,
 		return forecastProvider.requestByZipCode(zipCode, DAYS)
 	}
 }
+

@@ -2,6 +2,7 @@ package se.driessen.johan.weatherapp.data.server
 
 import se.driessen.johan.weatherapp.data.db.ForecastDb
 import se.driessen.johan.weatherapp.domain.datasource.ForecastDataSource
+import se.driessen.johan.weatherapp.domain.model.Forecast
 import se.driessen.johan.weatherapp.domain.model.ForecastList
 
 class ForecastServer(val dataMapper: ServerDataMapper = ServerDataMapper(),
@@ -14,4 +15,6 @@ class ForecastServer(val dataMapper: ServerDataMapper = ServerDataMapper(),
 		forecastDb.saveForecast(converted)
 		return forecastDb.requestForecastByZipCode(zipCode, date)
 	}
+
+	override fun requestDayForecast(id: Long): Forecast? = throw UnsupportedOperationException()
 }
