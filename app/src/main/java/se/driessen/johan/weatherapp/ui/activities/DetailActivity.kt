@@ -2,11 +2,13 @@ package se.driessen.johan.weatherapp.ui.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
 import se.driessen.johan.weatherapp.R
 import se.driessen.johan.weatherapp.domain.commands.RequestDayForecastCommand
@@ -16,18 +18,22 @@ import se.driessen.johan.weatherapp.extensions.textColor
 import se.driessen.johan.weatherapp.extensions.toDateString
 import java.text.DateFormat
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), ToolbarManager {
 
 	companion object {
 		val ID = "DetailActivity:id"
 		val CITY_NAME = "DetailActivity:cityName"
 	}
 
+	override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_detail)
 
-		title = intent.getStringExtra(CITY_NAME)
+		initToolbar()
+		toolbarTitle = intent.getStringExtra(CITY_NAME)
+		enableHomeAsUp { onBackPressed() }
 
 		doAsync {
 			val result = RequestDayForecastCommand(intent.getLongExtra(ID, -1)).execute()
@@ -37,13 +43,13 @@ class DetailActivity : AppCompatActivity() {
 
 	private fun bindForecast(forecast: Forecast) = with(forecast) {
 		Picasso.with(ctx).load(iconUrl).into(icon)
-		supportActionBar?.subtitle = date.toDateString(DateFormat.FULL)
+		toolbar.subtitle = date.toDateString(DateFormat.FULL)
 		weatherDescription.text = description
 		bindWeather(high to maxTemperature, low to minTemperature)
 	}
 
 	private fun  bindWeather(vararg views: Pair<Int, TextView>) = views.forEach {
-		it.second.text = "${it.first.toString()}"
+		it.second.text = it.first.toString()
 		it.second.textColor = color(when (it.first) {
 			in -50..0 -> android.R.color.holo_red_dark
 			in 0..15 -> android.R.color.holo_orange_dark

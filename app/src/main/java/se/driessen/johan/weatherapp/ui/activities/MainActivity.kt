@@ -6,8 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.find
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 import se.driessen.johan.weatherapp.R
@@ -15,14 +17,18 @@ import se.driessen.johan.weatherapp.domain.commands.RequestForecastCommand
 import se.driessen.johan.weatherapp.ui.adapters.ForecastListAdapter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ToolbarManager {
+
+	override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
 
 	@TargetApi(21)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+		initToolbar()
 
 		forecastList.layoutManager = LinearLayoutManager(this)
+		attachToScroll(forecastList)
 
 		supportsLollipop {
 			window.statusBarColor = Color.DKGRAY
@@ -32,10 +38,11 @@ class MainActivity : AppCompatActivity() {
 			val result = RequestForecastCommand(12068).execute()
 
 			uiThread {
-				forecastList.adapter = ForecastListAdapter(result, {
+				val adapter = ForecastListAdapter(result, {
 					startActivity<DetailActivity>(DetailActivity.ID to it.id, DetailActivity.CITY_NAME to result.city)
 				})
-
+				forecastList.adapter = adapter
+				toolbarTitle = "${result.city} (${result.country})"
 			}
 		}
 	}
