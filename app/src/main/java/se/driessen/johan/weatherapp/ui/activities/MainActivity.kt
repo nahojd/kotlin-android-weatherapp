@@ -14,12 +14,15 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 import se.driessen.johan.weatherapp.R
 import se.driessen.johan.weatherapp.domain.commands.RequestForecastCommand
+import se.driessen.johan.weatherapp.extensions.DelegatesExt
 import se.driessen.johan.weatherapp.ui.adapters.ForecastListAdapter
 
 
 class MainActivity : AppCompatActivity(), ToolbarManager {
 
 	override val toolbar by lazy { find<Toolbar>(R.id.toolbar) }
+
+	val zipCode: Long by DelegatesExt.preference(this, SettingsActivity.ZIP_CODE, SettingsActivity.DEFAULT_ZIP)
 
 	@TargetApi(21)
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +36,18 @@ class MainActivity : AppCompatActivity(), ToolbarManager {
 		supportsLollipop {
 			window.statusBarColor = Color.DKGRAY
 		}
+	}
 
+	override fun onResume() {
+		super.onResume()
+
+		loadForecast()
+	}
+
+
+	private fun loadForecast() {
 		doAsync {
-			val result = RequestForecastCommand(12068).execute()
+			val result = RequestForecastCommand(zipCode).execute()
 
 			uiThread {
 				val adapter = ForecastListAdapter(result, {

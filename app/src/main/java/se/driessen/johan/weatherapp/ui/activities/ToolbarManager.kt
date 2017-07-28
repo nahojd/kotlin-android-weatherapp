@@ -3,6 +3,7 @@ package se.driessen.johan.weatherapp.ui.activities
 import android.support.v7.graphics.drawable.DrawerArrowDrawable
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.driessen.johan.weatherapp.R
 import se.driessen.johan.weatherapp.extensions.ctx
@@ -23,7 +24,7 @@ interface ToolbarManager {
 		toolbar.inflateMenu(R.menu.menu_main)
 		toolbar.setOnMenuItemClickListener {
 			when(it.itemId) {
-				R.id.action_settings -> App.instance.toast("Settings")
+				R.id.action_settings -> toolbar.ctx.startActivity<SettingsActivity>()
 				else -> App.instance.toast("Unknown option")
 			}
 			true

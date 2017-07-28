@@ -22,7 +22,7 @@ class ForecastDb (
 				.whereSimple("${CityForecastTable.ID} = ?", zipCode.toString())
 				.parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
-		city?.let { dataMapper.convertToDomain(it) }
+		city?.let { dataMapper.convertToDomain(it) } 
 	}
 
 	override fun requestDayForecast(id: Long): Forecast? = forecastDbHelper.use {

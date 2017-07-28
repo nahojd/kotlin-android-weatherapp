@@ -25,6 +25,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="se.driessen.johan.weatherapp.ui.activities.MainActivity" />
         </activity>
+        <activity android:name=".ui.activities.SettingsActivity" android:label="@string/settings"></activity>
     </application>
 
 </manifest>
